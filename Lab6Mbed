@@ -1,0 +1,44 @@
+
+//============================================================================
+// Name        : Lab6Mbed
+// Author      : Nicholas Requena
+// Version     : v0.1
+// Description : Introduction into embedded systems, and Keil studio IDE.
+//               This code light up and LED across pin D3, and allow you to 
+//               adjust its brightness level using the potentiometer on pin A0
+//============================================================================
+
+#include "mbed.h"
+
+// Initialize Pisn
+AnalogIn potPin(A0);
+PwmOut myled(D3);
+
+int main()
+{
+    Serial pc(USBTX, USBRX); // Initialize Transmitting and Recieving
+    pc.baud(9600);           // Set bandwidth to 9600
+    myled.period_ms(1);      // Set myled to 1.0 kHz
+
+    while(1)
+    {
+        float potValue = potPin.read(); 
+        pc.printf("Potentiometer reading: %f\n", potValue);
+        wait_ms(100);   // Program loops every 100ms
+        
+        myled = 0.0;   
+
+        if (potValue >= 0.2)    // The position of the potentiometer changes the brightness of the LED
+        {
+            myled = 0.2;
+        }
+        if (potValue >= 0.5)
+        {
+            myled = 0.7;
+        }
+        if (potValue == 1.0)
+        {
+            myled = 1.0;
+        }
+    }
+}
